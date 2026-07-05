@@ -1,0 +1,60 @@
+<%- include('partials_head', {title: 'قائمة السكربتات'}) %>
+<nav class="nav">
+  <div class="brand"><div class="brand-icon">7K</div><div><b><%= settings.appName || appName %></b><span><%= settings.brandText || 'مركز ملفاتك الخاصة' %></span></div></div>
+  <div class="nav-actions">
+    <% if (isOwner) { %><a class="nav-link admin-link" href="/admin">لوحة التحكم</a><% } %>
+    <a class="nav-link" href="/logout">تسجيل الخروج</a>
+  </div>
+</nav>
+
+<main class="container">
+  <section class="hero">
+    <div>
+      <span class="pill">ملفات محمية حسب الرتبة</span>
+      <h1><%= settings.heroTitle || 'كل سكربتاتك في مكان واحد' %></h1>
+      <p><%= settings.heroText || 'الملفات تظهر حسب رتبتك في الديسكورد، والتحميل محدود ومحمي.' %></p>
+    </div>
+    <div class="user-card">
+      <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=128" onerror="this.style.display='none'">
+      <strong><%= user.username %></strong>
+      <small><%= isOwner ? 'صاحب المتجر' : 'عميل' %></small>
+    </div>
+  </section>
+
+  <% if (!discordOk) { %>
+    <div class="alert danger">تعذر الاتصال بالديسكورد للتحقق من الرتب. تأكد أن BOT_TOKEN صحيح وأن البوت داخل السيرفر.</div>
+  <% } %>
+
+  <section class="section-title">
+    <h2>ملفاتك المتاحة</h2>
+    <p>اضغط تحميل للملف المسموح لك. كل ملف يمكن تحميله مرة واحدة فقط.</p>
+  </section>
+
+  <% if (!scripts.length) { %>
+    <div class="empty">
+      <div class="empty-icon">📦</div>
+      <h3>لا توجد ملفات متاحة لحسابك حالياً</h3>
+      <p>إذا كنت مشتريًا، تأكد أن الرتبة موجودة في حسابك داخل الديسكورد.</p>
+    </div>
+  <% } else { %>
+    <div class="grid">
+      <% scripts.forEach(s => { %>
+        <article class="script-card">
+          <div class="script-top">
+            <div class="file-icon">ZIP</div>
+            <span>v<%= s.version %></span>
+          </div>
+          <h3><%= s.name %></h3>
+          <p><%= s.description || 'ملف سكربت خاص ومحمي.' %></p>
+          <% if (s.downloaded && !isOwner) { %>
+            <button class="btn disabled" disabled>تم التحميل مسبقًا</button>
+          <% } else { %>
+            <a class="btn" href="/download/<%= s.id %>">تحميل الملف</a>
+          <% } %>
+        </article>
+      <% }) %>
+    </div>
+  <% } %>
+</main>
+</body>
+</html>

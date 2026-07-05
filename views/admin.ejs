@@ -1,0 +1,68 @@
+<%- include('partials_head', {title: 'لوحة التحكم'}) %>
+<nav class="nav">
+  <div class="brand"><div class="brand-icon">7K</div><div><b>لوحة صاحب المتجر</b><span>إدارة الموقع والملفات</span></div></div>
+  <div class="nav-actions">
+    <a class="nav-link" href="/scripts">قائمة السكربتات</a>
+    <a class="nav-link" href="/logout">خروج</a>
+  </div>
+</nav>
+
+<main class="container">
+  <section class="admin-hero">
+    <h1>لوحة التحكم</h1>
+    <p>ارفع ملفات ZIP، اربط كل سكربت برتبة Discord، وعدّل ألوان الموقع من هنا.</p>
+    <div class="mini-stats">
+      <div><b><%= scripts.length %></b><span>سكربت</span></div>
+      <div><b><%= downloads.length %></b><span>تحميل</span></div>
+    </div>
+  </section>
+
+  <div class="admin-grid">
+    <section class="panel">
+      <h2>إعدادات الواجهة</h2>
+      <form method="POST" action="/admin/settings">
+        <label>اسم الموقع<input name="appName" value="<%= settings.appName || appName %>"></label>
+        <label>وصف صغير<input name="brandText" value="<%= settings.brandText || '' %>"></label>
+        <label>عنوان الصفحة<input name="heroTitle" value="<%= settings.heroTitle || '' %>"></label>
+        <label>وصف الصفحة<textarea name="heroText"><%= settings.heroText || '' %></textarea></label>
+        <div class="two">
+          <label>اللون الأساسي<input type="color" name="primary" value="<%= settings.primary || '#38bdf8' %>"></label>
+          <label>اللون الثاني<input type="color" name="secondary" value="<%= settings.secondary || '#2563eb' %>"></label>
+        </div>
+        <button class="btn" type="submit">حفظ الإعدادات</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>رفع سكربت جديد</h2>
+      <form method="POST" action="/admin/scripts" enctype="multipart/form-data">
+        <label>اسم السكربت<input name="name" placeholder="مثال: 7kmstore_admin"></label>
+        <label>الإصدار<input name="version" placeholder="1.0.0"></label>
+        <label>Role ID<input name="roleId" placeholder="ايدي الرتبة اللي يظهر لها السكربت"></label>
+        <label>وصف السكربت<textarea name="description" placeholder="اكتب وصف مختصر"></textarea></label>
+        <label>ملف ZIP<input type="file" name="file" accept=".zip"></label>
+        <button class="btn" type="submit">رفع السكربت</button>
+      </form>
+    </section>
+  </div>
+
+  <section class="panel full">
+    <h2>السكربتات المرفوعة</h2>
+    <% if (!scripts.length) { %>
+      <p class="muted">ما فيه سكربتات مرفوعة حالياً.</p>
+    <% } else { %>
+      <div class="table">
+        <% scripts.forEach(s => { %>
+          <div class="row">
+            <div><b><%= s.name %></b><span>v<%= s.version %> — Role: <%= s.roleId || 'غير محدد' %></span></div>
+            <form method="POST" action="/admin/scripts/<%= s.id %>/delete" onsubmit="return confirm('حذف السكربت؟')">
+              <button class="btn danger" type="submit">حذف</button>
+            </form>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  </section>
+</main>
+</body>
+</html>

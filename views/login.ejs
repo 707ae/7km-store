@@ -1,0 +1,12 @@
+<%- include('partials_head', {title: appName}) %>
+<main class="login-page">
+  <section class="login-card">
+    <div class="brand-mark">7K</div>
+    <h1><%= settings.appName || appName %></h1>
+    <p><%= settings.brandText || 'مركز ملفاتك الخاصة' %></p>
+    <a class="btn login-btn" href="/login">تسجيل الدخول عبر Discord</a>
+    <span class="hint">بعد الدخول ستظهر لك الملفات المتاحة لحسابك فقط.</span>
+  </section>
+</main>
+</body>
+</html>

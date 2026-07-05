@@ -1,0 +1,11 @@
+<%- include('partials_head', {title: title || 'خطأ'}) %>
+<main class="login-page">
+  <section class="login-card error-card">
+    <div class="brand-mark danger-mark">!</div>
+    <h1><%= title %></h1>
+    <p><%= message %></p>
+    <a class="btn" href="/scripts">رجوع</a>
+  </section>
+</main>
+</body>
+</html>
