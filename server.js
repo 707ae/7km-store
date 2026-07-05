@@ -14,6 +14,10 @@ const PORT = process.env.PORT || 3000;
 const DB_PATH = path.join(__dirname, 'data', 'db.json');
 const UPLOAD_DIR = path.join(__dirname, 'uploads');
 
+if (!fs.existsSync(UPLOAD_DIR)) {
+  fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+}
+
 function readDB(){
   if(!fs.existsSync(DB_PATH)){
     fs.writeFileSync(DB_PATH, JSON.stringify({settings:{},scripts:[],downloads:[]}, null, 2));
